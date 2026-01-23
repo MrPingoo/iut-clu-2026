@@ -1,0 +1,287 @@
+/* Styles pour les pages d'authentification et de gestion des parties */
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.auth-box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    max-width: 450px;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.auth-box .logo {
+    font-size: 3rem;
+    margin-bottom: 30px;
+}
+
+.auth-form h2 {
+    color: #ffd700;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #ffd700;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffd700;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #fff;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.auth-form .validate-button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-link p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+}
+
+.auth-link a {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.auth-link a:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.error-message {
+    background: rgba(231, 76, 60, 0.2);
+    border: 2px solid #e74c3c;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Styles pour la page des parties */
+
+.games-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.games-box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    max-width: 900px;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.games-box .logo {
+    font-size: 3rem;
+    margin-bottom: 30px;
+}
+
+.games-content h2 {
+    color: #ffd700;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+.games-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.games-table thead {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.games-table th {
+    padding: 15px;
+    color: #ffd700;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: left;
+    border-bottom: 2px solid #ffd700;
+}
+
+.games-table td {
+    padding: 15px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.games-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.games-table tbody tr:hover {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.character-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffd700;
+}
+
+.character-badge span {
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.character-badge.character-blue {
+    border-color: #3498db;
+    background: rgba(52, 152, 219, 0.2);
+}
+
+.character-badge.character-red {
+    border-color: #e74c3c;
+    background: rgba(231, 76, 60, 0.2);
+}
+
+.character-badge.character-green {
+    border-color: #27ae60;
+    background: rgba(39, 174, 96, 0.2);
+}
+
+.character-badge.character-purple {
+    border-color: #9b59b6;
+    background: rgba(155, 89, 182, 0.2);
+}
+
+.character-badge.character-white {
+    border-color: #ecf0f1;
+    background: rgba(236, 240, 241, 0.2);
+}
+
+.character-badge.character-yellow {
+    border-color: #f39c12;
+    background: rgba(243, 156, 18, 0.2);
+}
+
+.play-button {
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.play-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+}
+
+.play-button:active {
+    transform: translateY(0);
+}
+
+.new-game-button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+.new-game-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(46, 204, 113, 0.6);
+}
+
+.new-game-button:active {
+    transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-box,
+    .games-box {
+        padding: 25px;
+    }
+
+    .auth-box .logo,
+    .games-box .logo {
+        font-size: 2.5rem;
+    }
+
+    .games-table {
+        font-size: 0.85rem;
+    }
+
+    .games-table th,
+    .games-table td {
+        padding: 10px;
+    }
+
+    .character-badge span {
+        display: none;
+    }
+}

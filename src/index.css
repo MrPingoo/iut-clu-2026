@@ -1,0 +1,52 @@
+/* index.css - Styles de base et polices */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Rye&display=swap');
+
+:root {
+  font-family: 'Cinzel', serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #1a1a2e;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+a {
+  font-weight: 500;
+  color: #ffd700;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #fff;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid #ffd700;
+}
+
