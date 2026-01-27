@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import api from '../services/api';
 import '../styles/auth.css';
 
 function Register() {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -29,29 +29,13 @@ function Register() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password
-        }),
-      });
+      await api.register(formData.email, formData.password);
 
-      if (!response.ok) {
-        throw new Error('Erreur lors de la création du compte');
-      }
-
-      const data = await response.json();
+      // Compte créé avec succès, redirection vers la page de login
       navigate('/login');
     } catch (err) {
-      setError(err.message);
-      // Pour le développement, redirection directe
-      console.log('Mode développement - redirection vers /login');
-      navigate('/login');
+      setError(err.message || 'Erreur lors de la création du compte');
+      console.error('Erreur lors de l\'inscription:', err);
     }
   };
 
@@ -65,18 +49,6 @@ function Register() {
 
           {error && <div className="error-message">{error}</div>}
 
-          <div className="form-group">
-            <label htmlFor="username">Nom d'utilisateur</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="Votre pseudo"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
 
           <div className="form-group">
             <label htmlFor="email">Email</label>

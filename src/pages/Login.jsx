@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import api from '../services/api';
 import '../styles/auth.css';
 
 function Login() {
@@ -22,27 +23,19 @@ function Login() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const data = await api.login(formData.email, formData.password);
 
-      if (!response.ok) {
-        throw new Error('Identifiants incorrects');
+      // Stocker le token JWT et les informations utilisateur
+      localStorage.setItem('token', data.token);
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
       }
 
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      // Redirection vers la page des parties
       navigate('/games');
     } catch (err) {
-      setError(err.message);
-      // Pour le développement, redirection directe
-      console.log('Mode développement - redirection vers /games');
-      navigate('/games');
+      setError(err.message || 'Identifiants incorrects');
+      console.error('Erreur de connexion:', err);
     }
   };
 
