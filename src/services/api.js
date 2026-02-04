@@ -1,6 +1,6 @@
 // Service API pour centraliser les appels à l'API Symfony
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 class ApiService {
   /**
@@ -61,7 +61,9 @@ class ApiService {
    * Gestion des parties
    */
   async getGames() {
-    return this.request('/api/games');
+    return this.request('/api/games', {
+      method: 'GET',
+    });
   }
 
   async createGame(character) {

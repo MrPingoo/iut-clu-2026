@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import api from '../services/api';
 import '../styles/auth.css';
 
 function Games() {
@@ -13,52 +14,12 @@ function Games() {
 
   const loadGames = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/games', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Erreur lors du chargement des parties');
-      }
-
-      const data = await response.json();
+      const data = await api.getGames();
       setGames(data);
     } catch (err) {
-      console.log('Mode développement - données de test');
-      // Données de test pour le développement
-      setGames([
-        {
-          id: 1,
-          date: '2026-01-14T14:30:00',
-          character: 'Colonel Moutarde',
-          status: 'en_cours',
-          characterColor: 'blue'
-        },
-        {
-          id: 2,
-          date: '2026-01-13T20:15:00',
-          character: 'Mademoiselle Rose',
-          status: 'terminee',
-          characterColor: 'red'
-        },
-        {
-          id: 3,
-          date: '2026-01-12T18:45:00',
-          character: 'Révérend Olive',
-          status: 'en_cours',
-          characterColor: 'green'
-        },
-        {
-          id: 4,
-          date: '2026-01-11T16:00:00',
-          character: 'Professeur Violet',
-          status: 'terminee',
-          characterColor: 'purple'
-        }
-      ]);
+      console.error('Erreur lors du chargement des parties:', err);
+      // En cas d'erreur, on affiche un tableau vide
+      setGames([]);
     } finally {
       setLoading(false);
     }
@@ -68,8 +29,26 @@ function Games() {
     navigate(`/game/${gameId}`);
   };
 
-  const handleNewGame = () => {
-    navigate('/game');
+  const handleNewGame = async () => {
+    try {
+      // Pour l'instant, on sélectionne un personnage aléatoire
+      const characters = [
+        'Colonel Moutarde',
+        'Mademoiselle Rose',
+        'Révérend Olive',
+        'Professeur Violet',
+        'Madame Leblanc',
+        'Docteur Lenoir'
+      ];
+      const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
+
+      const newGame = await api.createGame(randomCharacter);
+      navigate(`/game/${newGame.id}`);
+    } catch (err) {
+      console.error('Erreur lors de la création de la partie:', err);
+      // En mode développement, on redirige quand même
+      navigate('/game');
+    }
   };
 
   const handleLogout = () => {

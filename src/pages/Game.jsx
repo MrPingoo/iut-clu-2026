@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Board from '../components/Board';
+import CharacterSelector from '../components/CharacterSelector';
 import DicePopup from '../components/DicePopup';
 import CardGrid from '../components/CardGrid';
 import ChatZone from '../components/ChatZone';
+import { CHARACTERS } from '../config/boardConfig';
 import '../styles/game.css';
 
 function Game() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [showDicePopup, setShowDicePopup] = useState(false);
+  const [diceResult, setDiceResult] = useState(null);
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [messages, setMessages] = useState([
-    { text: 'Bienvenue dans Clue !', type: 'system' }
+    { text: 'Bienvenue dans Clue !', type: 'system' },
+    { text: '🎯 Sélectionnez un personnage pour commencer', type: 'system' }
   ]);
   const [selectedCards, setSelectedCards] = useState({
     location: null,
@@ -29,7 +35,7 @@ function Game() {
   const loadGame = async (gameId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:8000/api/games/${gameId}`, {
+      const response = await fetch(`http://localhost:8080/api/games/${gameId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -49,7 +55,7 @@ function Game() {
   const createNewGame = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/games', {
+      const response = await fetch('http://localhost:8080/api/games', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -72,7 +78,13 @@ function Game() {
   };
 
   const handleDiceRoll = (result) => {
+    setDiceResult(result);
     addMessage(`🎲 Dé lancé : ${result}`, 'system');
+    if (selectedCharacter) {
+      addMessage(`Cliquez sur une case verte pour déplacer ${CHARACTERS[Object.keys(CHARACTERS).find(k => CHARACTERS[k].id === selectedCharacter)]?.name}`, 'system');
+    } else {
+      addMessage('⚠️ Veuillez d\'abord sélectionner un personnage', 'system');
+    }
   };
 
   const handleValidate = async (location, character, weapon) => {
@@ -87,7 +99,7 @@ function Game() {
     if (id) {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8000/api/games/${id}/move`, {
+        const response = await fetch(`http://localhost:8080/api/games/${id}/move`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -119,6 +131,33 @@ function Game() {
       ...prev,
       [cardType]: prev[cardType] === value ? null : value
     }));
+
+    // Si c'est un personnage, le sélectionner pour le plateau
+    if (cardType === 'character') {
+      const characterKey = Object.keys(CHARACTERS).find(
+        key => CHARACTERS[key].name === value
+      );
+      if (characterKey) {
+        setSelectedCharacter(CHARACTERS[characterKey].id);
+        addMessage(`👤 Personnage sélectionné : ${value}`, 'system');
+        addMessage('🎲 Lancez les dés pour voir les mouvements possibles', 'system');
+      }
+    }
+  };
+
+  const handleMoveComplete = (moveInfo) => {
+    const { character, room } = moveInfo;
+    if (room) {
+      addMessage(`✅ ${character} est entré(e) dans ${room}`, 'system');
+      setSelectedCards(prev => ({
+        ...prev,
+        location: room
+      }));
+    } else {
+      addMessage(`✅ ${character} s'est déplacé(e)`, 'system');
+    }
+    // Réinitialiser le résultat des dés après le déplacement
+    setDiceResult(null);
   };
 
   return (
@@ -128,11 +167,22 @@ function Game() {
       <div className="main-content">
         {/* Section gauche: Plateau de jeu */}
         <div className="game-section">
+          <CharacterSelector
+            selectedCharacter={selectedCharacter}
+            onSelect={(charId) => {
+              setSelectedCharacter(charId);
+              const char = Object.values(CHARACTERS).find(c => c.id === charId);
+              if (char) {
+                addMessage(`👤 ${char.name} sélectionné(e)`, 'system');
+                addMessage('🎲 Lancez les dés pour commencer', 'system');
+              }
+            }}
+          />
           <div className="board-container">
-            <img
-              src="/assets/images/board.jpg"
-              alt="Plateau de Clue"
-              className="game-board"
+            <Board
+              selectedCharacter={selectedCharacter}
+              diceResult={diceResult}
+              onMoveComplete={handleMoveComplete}
             />
           </div>
         </div>

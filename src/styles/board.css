@@ -1,0 +1,78 @@
+/* Styles pour le composant Board */
+
+.board-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.game-board-canvas {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border: 3px solid #8b4513;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  background-color: #1a1a1a;
+}
+
+.game-board-canvas:hover {
+  box-shadow: 0 6px 16px rgba(255, 215, 0, 0.3);
+}
+
+.board-info {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  padding: 1rem;
+  color: #ffd700;
+  font-family: 'Georgia', serif;
+  min-width: 300px;
+  text-align: center;
+}
+
+.board-info p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.board-info p:first-child {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Animation des personnages */
+@keyframes character-move {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Indicateur de sélection */
+.board-wrapper.selecting .game-board-canvas {
+  cursor: crosshair;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .game-board-canvas {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-board-canvas {
+    max-width: 100%;
+  }
+
+  .board-info {
+    min-width: unset;
+    width: 100%;
+  }
+}
