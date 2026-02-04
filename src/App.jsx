@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Games from './pages/Games';
 import Game from './pages/Game';
+import BoardDebug from './components/BoardDebug';
 import './App.css';
 
 function App() {
@@ -14,8 +15,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/game" element={<Game />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/debug" element={<BoardDebug />} />
+          <Route path="/game" element={<Game />} />
           <Route
             path="/games"
             element={

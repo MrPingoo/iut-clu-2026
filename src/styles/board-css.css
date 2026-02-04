@@ -1,0 +1,304 @@
+/* Plateau Cluedo CSS - Grille 24x24 */
+
+.board-wrapper-css {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.board-css {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  grid-template-rows: repeat(24, 1fr);
+  gap: 0;
+  width: 800px;
+  height: 800px;
+  background: #1a1a2e;
+  border: 4px solid #8b4513;
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.5),
+    0 10px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.board-cell-css {
+  position: relative;
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+/* Types de cases */
+.cell-wall {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+.cell-empty {
+  background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
+  border-color: rgba(139, 69, 19, 0.3);
+}
+
+.cell-door {
+  background: radial-gradient(circle, #f39c12 0%, #e67e22 100%);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Effet de survol */
+.board-cell-css:hover {
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Cases possibles (vertes) */
+.board-cell-css.possible-move {
+  background: radial-gradient(circle, #27ae60 0%, #2ecc71 100%) !important;
+  animation: pulse 1s infinite;
+  cursor: pointer;
+  z-index: 10;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(46, 204, 113, 0.8);
+  }
+}
+
+.board-cell-css.possible-move:hover {
+  transform: scale(1.1);
+  z-index: 20;
+}
+
+/* Chemin prévisualisé */
+.board-cell-css.path-preview {
+  background: radial-gradient(circle, #f1c40f 0%, #f39c12 100%) !important;
+  box-shadow: 0 0 10px rgba(241, 196, 15, 0.6);
+  z-index: 5;
+}
+
+/* Pièces - Couleurs distinctes */
+.cell-room-3 { /* Cuisine */
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+
+.cell-room-4 { /* Salle de billard */
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+.cell-room-5 { /* Bibliothèque */
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.cell-room-6 { /* Véranda */
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+}
+
+.cell-room-7 { /* Salle à manger */
+  background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+}
+
+.cell-room-8 { /* Salon */
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+}
+
+.cell-room-9 { /* Hall */
+  background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%);
+}
+
+.cell-room-10 { /* Bureau */
+  background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+}
+
+.cell-room-11 { /* Studio */
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+}
+
+/* Noms des pièces */
+.room-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* Personnages sur le plateau */
+.character-pawn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  z-index: 100;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.character-pawn.selected {
+  border: 3px solid #ffd700;
+  box-shadow:
+    0 0 20px rgba(255, 215, 0, 0.8),
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%) scale(1.2);
+  z-index: 101;
+}
+
+.character-pawn:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  z-index: 101;
+}
+
+/* Initiale du personnage */
+.character-initial {
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Blanc a une initiale noire pour la visibilité */
+.character-pawn[data-character="madame-leblanc"] .character-initial {
+  color: #000;
+}
+
+/* Informations du plateau */
+.board-info-css {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.board-info-css p {
+  margin: 5px 0;
+  color: #fff;
+  font-size: 14px;
+}
+
+.board-info-css .info-highlight {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+/* Légende du plateau */
+.board-legend-css {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.legend-item-css {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.legend-color-css {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Animation de déplacement */
+@keyframes characterMove {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.character-pawn.moving {
+  animation: characterMove 0.3s ease;
+}
+
+/* Grille d'aide (optionnelle) */
+.board-css.show-grid .board-cell-css {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Coordonnées (mode debug) */
+.cell-coords {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  font-family: monospace;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .board-css {
+    width: 600px;
+    height: 600px;
+  }
+
+  .character-pawn {
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+  }
+
+  .room-label {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 650px) {
+  .board-css {
+    width: 400px;
+    height: 400px;
+  }
+
+  .character-pawn {
+    width: 14px;
+    height: 14px;
+    font-size: 9px;
+  }
+
+  .room-label {
+    font-size: 6px;
+  }
+
+  .board-cell-css {
+    border: 0.25px solid rgba(255, 255, 255, 0.1);
+  }
+}

@@ -1,0 +1,129 @@
+/* Vue CSS du plateau Cluedo 24x24 */
+/* Cette vue permet de visualiser la grille pour déboguer les déplacements */
+
+.board-debug {
+    display: grid;
+    grid-template-columns: repeat(24, 30px);
+    grid-template-rows: repeat(24, 30px);
+    gap: 1px;
+    background: #000;
+    padding: 20px;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+.board-cell {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Types de cases */
+.cell-wall {
+    background: #2c3e50;
+    color: #666;
+}
+
+.cell-empty {
+    background: #ecf0f1;
+    color: #333;
+}
+
+.cell-door {
+    background: #f39c12;
+    color: #fff;
+}
+
+/* Pièces */
+.cell-room-3 {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.cell-room-4 {
+    background: #3498db;
+    color: #fff;
+}
+
+.cell-room-5 {
+    background: #2ecc71;
+    color: #fff;
+}
+
+.cell-room-6 {
+    background: #9b59b6;
+    color: #fff;
+}
+
+.cell-room-7 {
+    background: #f1c40f;
+    color: #333;
+}
+
+.cell-room-8 {
+    background: #e67e22;
+    color: #fff;
+}
+
+.cell-room-9 {
+    background: #1abc9c;
+    color: #fff;
+}
+
+.cell-room-10 {
+    background: #34495e;
+    color: #fff;
+}
+
+.cell-room-11 {
+    background: #95a5a6;
+    color: #fff;
+}
+
+/* Personnages */
+.cell-character {
+    position: relative;
+}
+
+.cell-character::after {
+    content: '👤';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+}
+
+/* Légende */
+.board-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-color {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    border: 2px solid #fff;
+}
+
+.legend-label {
+    font-size: 14px;
+    color: #fff;
+}

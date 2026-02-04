@@ -1,42 +1,47 @@
 import { useState } from 'react';
+import { ROOMS, CHARACTERS, WEAPONS } from '../config/boardConfig';
 
 const locations = [
-  { id: 'ballroom', name: 'Salle de bal', class: 'room-ballroom' },
-  { id: 'billiardroom', name: 'Billard', class: 'room-billiardroom' },
-  { id: 'conservatory', name: 'Véranda', class: 'room-conservatory' },
-  { id: 'diningroom', name: 'Salle à manger', class: 'room-diningroom' },
-  { id: 'hall', name: 'Hall', class: 'room-hall' },
-  { id: 'kitchen', name: 'Cuisine', class: 'room-kitchen' },
-  { id: 'lounge', name: 'Salon', class: 'room-lounge' },
-  { id: 'study', name: 'Bureau', class: 'room-study' },
-  { id: 'library', name: 'Bibliothèque', class: 'room-library' }
+  { id: 'Cuisine', name: 'Cuisine', class: 'room-kitchen' },
+  { id: 'Salle de billard', name: 'Billard', class: 'room-billiardroom' },
+  { id: 'Bibliothèque', name: 'Bibliothèque', class: 'room-library' },
+  { id: 'Véranda', name: 'Véranda', class: 'room-conservatory' },
+  { id: 'Salle à manger', name: 'Salle à manger', class: 'room-diningroom' },
+  { id: 'Salon', name: 'Salon', class: 'room-lounge' },
+  { id: 'Hall', name: 'Hall', class: 'room-hall' },
+  { id: 'Bureau', name: 'Bureau', class: 'room-study' },
+  { id: 'Studio', name: 'Studio', class: 'room-ballroom' }
 ];
 
 const characters = [
-  { id: 'red', name: 'Mlle Rose', class: 'character-red' },
-  { id: 'blue', name: 'Colonel Moutarde', class: 'character-blue' },
-  { id: 'white', name: 'Mme Leblanc', class: 'character-white' },
-  { id: 'purple', name: 'Professeur Violet', class: 'character-purple' },
-  { id: 'green', name: 'Révérend Olive', class: 'character-green' },
-  { id: 'yellow', name: 'Mme Pervenche', class: 'character-yellow' }
+  { id: 'Mademoiselle Rose', name: 'Mlle Rose', class: 'character-red' },
+  { id: 'Colonel Moutarde', name: 'Col. Moutarde', class: 'character-blue' },
+  { id: 'Madame Leblanc', name: 'Mme Leblanc', class: 'character-white' },
+  { id: 'Professeur Violet', name: 'Prof. Violet', class: 'character-purple' },
+  { id: 'Révérend Olive', name: 'Rév. Olive', class: 'character-green' },
+  { id: 'Docteur Lenoir', name: 'Dr. Lenoir', class: 'character-yellow' }
 ];
 
 const weapons = [
-  { id: 'baton', name: 'Matraque', class: 'weapon-baton' },
-  { id: 'gun', name: 'Revolver', class: 'weapon-gun' },
-  { id: 'candle', name: 'Chandelier', class: 'weapon-candle' },
-  { id: 'knife', name: 'Poignard', class: 'weapon-knife' },
-  { id: 'rope', name: 'Corde', class: 'weapon-rope' },
-  { id: 'spanner', name: 'Clé anglaise', class: 'weapon-spanner' }
+  { id: 'Matraque', name: 'Matraque', class: 'weapon-baton' },
+  { id: 'Revolver', name: 'Revolver', class: 'weapon-gun' },
+  { id: 'Chandelier', name: 'Chandelier', class: 'weapon-candle' },
+  { id: 'Poignard', name: 'Poignard', class: 'weapon-knife' },
+  { id: 'Corde', name: 'Corde', class: 'weapon-rope' },
+  { id: 'Clé anglaise', name: 'Clé anglaise', class: 'weapon-spanner' }
 ];
 
-function CardGrid({ selectedCards, onCardToggle }) {
+function CardGrid({ selectedCards, onCardToggle, playerCards = [] }) {
   const handleCardClick = (type, id) => {
     onCardToggle(type, id);
   };
 
   const isSelected = (type, id) => {
     return selectedCards[type] === id;
+  };
+
+  const hasCard = (cardName) => {
+    return playerCards.includes(cardName);
   };
 
   return (
@@ -49,9 +54,9 @@ function CardGrid({ selectedCards, onCardToggle }) {
               key={location.id}
               className={`card-bubble ${location.class} ${
                 isSelected('location', location.id) ? 'selected' : ''
-              }`}
+              } ${hasCard(location.id) ? 'player-card' : ''}`}
               onClick={() => handleCardClick('location', location.id)}
-              title={location.name}
+              title={`${location.name}${hasCard(location.id) ? ' (Votre carte)' : ''}`}
             />
           ))}
         </div>
@@ -65,9 +70,9 @@ function CardGrid({ selectedCards, onCardToggle }) {
               key={character.id}
               className={`card-bubble ${character.class} ${
                 isSelected('character', character.id) ? 'selected' : ''
-              }`}
+              } ${hasCard(character.id) ? 'player-card' : ''}`}
               onClick={() => handleCardClick('character', character.id)}
-              title={character.name}
+              title={`${character.name}${hasCard(character.id) ? ' (Votre carte)' : ''}`}
             />
           ))}
         </div>
@@ -81,9 +86,9 @@ function CardGrid({ selectedCards, onCardToggle }) {
               key={weapon.id}
               className={`card-bubble ${weapon.class} ${
                 isSelected('weapon', weapon.id) ? 'selected' : ''
-              }`}
+              } ${hasCard(weapon.id) ? 'player-card' : ''}`}
               onClick={() => handleCardClick('weapon', weapon.id)}
-              title={weapon.name}
+              title={`${weapon.name}${hasCard(weapon.id) ? ' (Votre carte)' : ''}`}
             />
           ))}
         </div>

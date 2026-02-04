@@ -28,38 +28,38 @@ export const CHARACTERS = {
   MOUTARDE: {
     id: 'colonel-moutarde',
     name: 'Colonel Moutarde',
-    color: 'yellow',
+    color: '#FFD700', // Jaune doré
     startPosition: { x: 0, y: 17 }
   },
   ROSE: {
     id: 'mademoiselle-rose',
     name: 'Mademoiselle Rose',
-    color: 'red',
-    startPosition: { x: 23, y: 7 }
+    color: '#FF1493', // Rose vif
+    startPosition: { x: 23, y: 8 }
   },
   OLIVE: {
     id: 'reverend-olive',
     name: 'Révérend Olive',
-    color: 'green',
-    startPosition: { x: 0, y: 9 }
+    color: '#32CD32', // Vert lime
+    startPosition: { x: 0, y: 8 }
   },
   VIOLET: {
     id: 'professeur-violet',
     name: 'Professeur Violet',
-    color: 'purple',
-    startPosition: { x: 23, y: 19 }
+    color: '#9370DB', // Violet moyen
+    startPosition: { x: 23, y: 16 }
   },
   LEBLANC: {
     id: 'madame-leblanc',
     name: 'Madame Leblanc',
-    color: 'white',
+    color: '#F5F5F5', // Blanc cassé
     startPosition: { x: 14, y: 0 }
   },
   LENOIR: {
     id: 'docteur-lenoir',
     name: 'Docteur Lenoir',
-    color: 'blue',
-    startPosition: { x: 9, y: 24 }
+    color: '#1E90FF', // Bleu dodger
+    startPosition: { x: 9, y: 23 }
   }
 };
 

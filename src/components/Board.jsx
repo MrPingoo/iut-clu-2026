@@ -3,7 +3,7 @@ import { CLUEDO_GRID, CHARACTERS, ROOM_NUMBERS } from '../config/boardConfig';
 import { MovementController } from '../utils/pathfinding';
 import '../styles/board.css';
 
-function Board({ selectedCharacter, diceResult, onMoveComplete }) {
+function Board({ selectedCharacter, diceResult, onMoveComplete, allCharacters }) {
   const canvasRef = useRef(null);
   const boardImageRef = useRef(null);
   const [boardLoaded, setboardLoaded] = useState(false);
@@ -28,22 +28,27 @@ function Board({ selectedCharacter, diceResult, onMoveComplete }) {
     return new MovementController(plateau);
   });
 
-  // Initialiser les positions des personnages
+  // Synchroniser avec allCharacters si fourni (depuis GameManager)
   useEffect(() => {
-    const initialPositions = {};
-    Object.entries(CHARACTERS).forEach(([, char]) => {
-      initialPositions[char.id] = {
-        ...char,
-        position: { ...char.startPosition }
-      };
-    });
-    setCharacters(initialPositions);
-  }, []);
+    if (allCharacters && Object.keys(allCharacters).length > 0) {
+      setCharacters(allCharacters);
+    } else {
+      // Initialiser avec les positions par défaut
+      const initialPositions = {};
+      Object.entries(CHARACTERS).forEach(([, char]) => {
+        initialPositions[char.id] = {
+          ...char,
+          position: { ...char.startPosition }
+        };
+      });
+      setCharacters(initialPositions);
+    }
+  }, [allCharacters]);
 
   // Charger l'image du plateau
   useEffect(() => {
     const img = new Image();
-    img.src = '/assets/images/board_v2.jpg';
+    img.src = '/assets/images/board.jpg';
     img.onload = () => {
       boardImageRef.current = img;
       setboardLoaded(true);
@@ -111,22 +116,36 @@ function Board({ selectedCharacter, diceResult, onMoveComplete }) {
 
     // Dessiner les personnages
     Object.values(characters).forEach(character => {
-      const { position, color, name } = character;
+      const { position, color, name, id } = character;
       const x = (position.x + 0.5) * cellSize;
       const y = (position.y + 0.5) * cellSize;
-      const radius = cellSize * 0.3;
+      const radius = cellSize * 0.35;
+
+      // Ombre portée
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowBlur = 5;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
 
       // Cercle du personnage
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, 2 * Math.PI);
       ctx.fillStyle = color;
       ctx.fill();
-      ctx.strokeStyle = selectedCharacter === character.id ? '#ffd700' : '#000';
-      ctx.lineWidth = selectedCharacter === character.id ? 3 : 1;
+
+      // Réinitialiser l'ombre
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+
+      // Contour du personnage
+      ctx.strokeStyle = selectedCharacter === id ? '#FFD700' : '#000';
+      ctx.lineWidth = selectedCharacter === id ? 4 : 2;
       ctx.stroke();
 
       // Initiale du personnage
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = name === 'Madame Leblanc' ? '#000' : '#fff';
       ctx.font = `bold ${cellSize * 0.4}px Arial`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
