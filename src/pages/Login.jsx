@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import '../styles/auth.css';
 
@@ -10,6 +11,7 @@ function Login() {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -23,16 +25,26 @@ function Login() {
     setError('');
 
     try {
-      const data = await api.login(formData.email, formData.password);
+      // L'API retourne { token: "..." }
+      const response = await api.login(formData.email, formData.password);
 
-      // Stocker le token JWT et les informations utilisateur
-      localStorage.setItem('token', data.token);
-      if (data.user) {
-        localStorage.setItem('user', JSON.stringify(data.user));
+      console.log('Login response:', response);
+
+      // Utiliser le contexte pour stocker le token et l'utilisateur
+      if (response.token) {
+        // Extraire les données utilisateur du token ou utiliser celles retournées
+        const userData = response.user || { email: formData.email };
+
+        // Appeler la fonction login du contexte
+        login(userData, response.token);
+
+        console.log('Token saved via context, redirecting to /games');
+
+        // Redirection vers la page des parties
+        navigate('/games', { replace: true });
+      } else {
+        setError('Token manquant dans la réponse');
       }
-
-      // Redirection vers la page des parties
-      navigate('/games');
     } catch (err) {
       setError(err.message || 'Identifiants incorrects');
       console.error('Erreur de connexion:', err);

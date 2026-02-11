@@ -20,6 +20,7 @@ function Game() {
   const [playerCharacter, setPlayerCharacter] = useState(null);
   const [gameState, setGameState] = useState(null);
   const [isPlayerTurn, setIsPlayerTurn] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([
     { text: 'Bienvenue dans Clue !', type: 'system' }
   ]);
@@ -31,16 +32,29 @@ function Game() {
   const [playerCards, setPlayerCards] = useState([]);
 
   useEffect(() => {
-    if (id) {
-      loadGame(id);
-    } else {
-      initializeNewGame();
-    }
+    const initGame = async () => {
+      console.log('Game component mounted, id:', id);
+      setLoading(true);
+
+      if (id) {
+        await loadGame(id);
+      } else {
+        initializeNewGame();
+      }
+
+      setLoading(false);
+    };
+
+    initGame();
   }, [id]);
 
   const initializeNewGame = () => {
+    console.log('Initializing new game...');
+
     // Initialiser le jeu avec le GameManager
     const { playerCharacter: player, gameState: state } = gameManager.initializeGame();
+
+    console.log('Game initialized:', { player, state });
 
     setPlayerCharacter(player);
     setSelectedCharacter(player.id);
@@ -52,22 +66,30 @@ function Game() {
     addMessage(`🃏 Vous avez ${gameManager.getPlayerCards().length} cartes`, 'system');
     addMessage('📋 Vos cartes: ' + gameManager.getPlayerCards().join(', '), 'system');
     addMessage('🎲 Lancez les dés pour commencer votre tour', 'system');
+
+    console.log('gameState set:', state);
   };
 
   const loadGame = async (gameId) => {
+    console.log('Loading game:', gameId);
     try {
       const token = localStorage.getItem('token');
+      console.log('Token:', token ? 'exists' : 'missing');
+
       const response = await fetch(`http://localhost:8080/api/games/${gameId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
         throw new Error('Erreur lors du chargement de la partie');
       }
 
       const data = await response.json();
+      console.log('Game data from API:', data);
 
       // Charger l'état sauvegardé
       if (data.state) {
@@ -82,8 +104,12 @@ function Game() {
         setPlayerCards(gameManager.getPlayerCards());
 
         addMessage('✅ Partie chargée avec succès', 'system');
+      } else {
+        console.log('No state in response, initializing new game');
+        initializeNewGame();
       }
     } catch (err) {
+      console.error('Error loading game:', err);
       console.log('Impossible de charger la partie, nouvelle partie initialisée');
       initializeNewGame();
     }
@@ -279,14 +305,12 @@ function Game() {
       <div className="main-content">
         {/* Section gauche: Plateau de jeu */}
         <div className="game-section">
-          {gameState && (
-            <BoardCSS
-              selectedCharacter={selectedCharacter}
-              diceResult={diceResult}
-              onMoveComplete={handleMoveComplete}
-              allCharacters={gameState.characters}
-            />
-          )}
+          <BoardCSS
+            selectedCharacter={selectedCharacter}
+            diceResult={diceResult}
+            onMoveComplete={handleMoveComplete}
+            allCharacters={gameState?.characters || {}}
+          />
         </div>
 
         {/* Section droite: Contrôles */}

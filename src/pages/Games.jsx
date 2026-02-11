@@ -9,8 +9,15 @@ function Games() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Vérifier si l'utilisateur est connecté
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
     loadGames();
-  }, []);
+  }, [navigate]);
 
   const loadGames = async () => {
     try {
