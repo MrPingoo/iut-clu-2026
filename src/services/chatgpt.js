@@ -39,22 +39,36 @@ class ChatGPTService {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
+      const payload = {
+        character,
+        diceResult,
+        possibleMoves,
+        gameState
+      };
+
+      console.log('Envoi à ChatGPT API:', {
+        endpoint,
+        characterName: character.name,
+        diceResult,
+        possibleMovesCount: possibleMoves.length,
+        hasGrid: !!gameState.grid,
+        gridSize: gameState.grid ? `${gameState.grid.length}x${gameState.grid[0]?.length}` : 'N/A'
+      });
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify({
-          character,
-          diceResult,
-          possibleMoves,
-          gameState
-        })
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Erreur API:', response.status, errorText);
         throw new Error(`API error: ${response.status}`);
       }
 
       const decision = await response.json();
+      console.log('Décision IA reçue:', decision);
       return decision;
 
     } catch (error) {
