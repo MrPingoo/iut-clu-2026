@@ -1,39 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
-const locations = {
-  'ballroom': 'Salle de bal',
-  'billiardroom': 'Billard',
-  'conservatory': 'Véranda',
-  'diningroom': 'Salle à manger',
-  'hall': 'Hall',
-  'kitchen': 'Cuisine',
-  'lounge': 'Salon',
-  'study': 'Bureau',
-  'library': 'Bibliothèque'
-};
-
-const characters = {
-  'red': 'Mlle Rose',
-  'blue': 'Colonel Moutarde',
-  'white': 'Mme Leblanc',
-  'purple': 'Professeur Violet',
-  'green': 'Révérend Olive',
-  'yellow': 'Mme Pervenche'
-};
-
-const weapons = {
-  'baton': 'Matraque',
-  'gun': 'Revolver',
-  'candle': 'Chandelier',
-  'knife': 'Poignard',
-  'rope': 'Corde',
-  'spanner': 'Clé anglaise'
-};
-
-function ChatZone({ messages, onValidate, onDiceClick }) {
-  const [locationSelect, setLocationSelect] = useState('');
-  const [characterSelect, setCharacterSelect] = useState('');
-  const [weaponSelect, setWeaponSelect] = useState('');
+function ChatZone({ messages, onValidate, onDiceClick, selectedCards = { location: [], character: [], weapon: [] } }) {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -45,26 +12,16 @@ function ChatZone({ messages, onValidate, onDiceClick }) {
   };
 
   const handleValidate = () => {
-    if (!locationSelect || !characterSelect || !weaponSelect) {
+    // Pour la validation d'une hypothèse, on prend le premier élément de chaque tableau
+    const location = selectedCards.location[0];
+    const character = selectedCards.character[0];
+    const weapon = selectedCards.weapon[0];
+
+    if (!location || !character || !weapon) {
       return;
     }
 
-    const locationName = locations[locationSelect];
-    const characterName = characters[characterSelect];
-    const weaponName = weapons[weaponSelect];
-
-    onValidate(locationName, characterName, weaponName);
-
-    // Réinitialiser les sélections
-    setLocationSelect('');
-    setCharacterSelect('');
-    setWeaponSelect('');
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleValidate();
-    }
+    onValidate(location, character, weapon);
   };
 
   return (
@@ -87,44 +44,24 @@ function ChatZone({ messages, onValidate, onDiceClick }) {
         </div>
 
         <div className="chat-input">
-          <select
-            className="game-select"
-            value={locationSelect}
-            onChange={(e) => setLocationSelect(e.target.value)}
-            onKeyPress={handleKeyPress}
-          >
-            <option value="">Lieu...</option>
-            {Object.entries(locations).map(([key, value]) => (
-              <option key={key} value={key}>{value}</option>
-            ))}
-          </select>
+          <div className="selected-cards-display">
+            <div className="selected-category">
+              <strong>Lieux:</strong> {selectedCards.location.length > 0 ? selectedCards.location.join(', ') : 'Aucun'}
+            </div>
+            <div className="selected-category">
+              <strong>Personnages:</strong> {selectedCards.character.length > 0 ? selectedCards.character.join(', ') : 'Aucun'}
+            </div>
+            <div className="selected-category">
+              <strong>Armes:</strong> {selectedCards.weapon.length > 0 ? selectedCards.weapon.join(', ') : 'Aucune'}
+            </div>
+          </div>
 
-          <select
-            className="game-select"
-            value={characterSelect}
-            onChange={(e) => setCharacterSelect(e.target.value)}
-            onKeyPress={handleKeyPress}
+          <button
+            className="validate-button"
+            onClick={handleValidate}
+            disabled={!selectedCards.location[0] || !selectedCards.character[0] || !selectedCards.weapon[0]}
           >
-            <option value="">Personnage...</option>
-            {Object.entries(characters).map(([key, value]) => (
-              <option key={key} value={key}>{value}</option>
-            ))}
-          </select>
-
-          <select
-            className="game-select"
-            value={weaponSelect}
-            onChange={(e) => setWeaponSelect(e.target.value)}
-            onKeyPress={handleKeyPress}
-          >
-            <option value="">Arme...</option>
-            {Object.entries(weapons).map(([key, value]) => (
-              <option key={key} value={key}>{value}</option>
-            ))}
-          </select>
-
-          <button className="validate-button" onClick={handleValidate}>
-            Valider
+            Faire une hypothèse
           </button>
         </div>
       </div>

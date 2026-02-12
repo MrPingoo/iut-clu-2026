@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { ROOMS, CHARACTERS, WEAPONS } from '../config/boardConfig';
 
 const locations = [
   { id: 'Cuisine', name: 'Cuisine', class: 'room-kitchen' },
@@ -37,6 +35,10 @@ function CardGrid({ selectedCards, onCardToggle, playerCards = [] }) {
   };
 
   const isSelected = (type, id) => {
+    // Vérifier si selectedCards[type] est un tableau ou une valeur unique
+    if (Array.isArray(selectedCards[type])) {
+      return selectedCards[type].includes(id);
+    }
     return selectedCards[type] === id;
   };
 

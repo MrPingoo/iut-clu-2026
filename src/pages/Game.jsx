@@ -25,9 +25,9 @@ function Game() {
     { text: 'Bienvenue dans Clue !', type: 'system' }
   ]);
   const [selectedCards, setSelectedCards] = useState({
-    location: null,
-    character: null,
-    weapon: null
+    location: [],
+    character: [],
+    weapon: []
   });
   const [playerCards, setPlayerCards] = useState([]);
 
@@ -216,6 +216,11 @@ function Game() {
 
     if (result.refuted) {
       addMessage(`❌ ${result.refutedBy} vous montre discrètement la carte : ${result.cardShown}`, 'system');
+
+      // Ajouter la carte montrée aux cartes connues du joueur si elle n'y est pas déjà
+      if (result.cardShown && !playerCards.includes(result.cardShown)) {
+        setPlayerCards(prev => [...prev, result.cardShown]);
+      }
     } else {
       addMessage(`✅ Personne ne peut réfuter votre hypothèse !`, 'system');
     }
@@ -251,10 +256,17 @@ function Game() {
   };
 
   const handleCardToggle = (cardType, value) => {
-    setSelectedCards(prev => ({
-      ...prev,
-      [cardType]: prev[cardType] === value ? null : value
-    }));
+    setSelectedCards(prev => {
+      const currentSelection = prev[cardType];
+      const isCurrentlySelected = currentSelection.includes(value);
+
+      return {
+        ...prev,
+        [cardType]: isCurrentlySelected
+          ? currentSelection.filter(item => item !== value)
+          : [...currentSelection, value]
+      };
+    });
   };
 
   const handleMoveComplete = (moveInfo) => {
@@ -270,7 +282,7 @@ function Game() {
       addMessage(`✅ Vous entrez dans ${room}`, 'user');
       setSelectedCards(prev => ({
         ...prev,
-        location: room
+        location: prev.location.includes(room) ? prev.location : [...prev.location, room]
       }));
 
       addMessage(`💡 Vous pouvez maintenant faire une hypothèse`, 'system');
@@ -332,6 +344,7 @@ function Game() {
               }
             }}
             canRollDice={isPlayerTurn && !diceResult}
+            selectedCards={selectedCards}
           />
         </div>
       </div>

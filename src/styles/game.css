@@ -172,9 +172,22 @@ body {
 }
 
 .card-bubble.selected {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     border-color: #fff;
     transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(46, 204, 113, 0.6);
+    position: relative;
+}
+
+.card-bubble.selected::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.6) 0%, rgba(46, 204, 113, 0.6) 100%);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 /* Cartes possédées par le joueur */
@@ -200,6 +213,7 @@ body {
     justify-content: center;
     font-size: 12px;
     font-weight: bold;
+    z-index: 10;
 }
 
 /* Weapon card backgrounds */
@@ -355,9 +369,30 @@ body {
 }
 
 .chat-input {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 10px;
+}
+
+.selected-cards-display {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+}
+
+.selected-category {
+    font-size: 0.85rem;
+    color: #ffd700;
+    padding: 5px;
+}
+
+.selected-category strong {
+    color: #fff;
+    margin-right: 8px;
 }
 
 .game-select {
@@ -383,8 +418,8 @@ body {
 }
 
 .validate-button {
-    grid-column: 1 / -1;
-    padding: 10px;
+    width: 100%;
+    padding: 12px;
     background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     border: none;
     border-radius: 8px;
@@ -395,6 +430,13 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.validate-button:disabled {
+    background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
 }
 
 .validate-button:hover {
